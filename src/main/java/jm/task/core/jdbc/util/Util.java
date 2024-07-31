@@ -1,18 +1,22 @@
 package jm.task.core.jdbc.util;
 
+import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.model.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
-
 import org.hibernate.service.ServiceRegistry;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
 public class Util {
+
+    private Util() {
+    }
 
     private final static String USERNAME_KEY = "root";
     private final static String PASSWORD_KEY = "root";
@@ -58,6 +62,14 @@ public class Util {
                     USERNAME_KEY,
                     PASSWORD_KEY
             );
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void closeConnection() {
+        try {
+            UserDaoJDBCImpl.connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
